@@ -12,11 +12,15 @@ export default function TableEvents() {
   const [eventoList, setEventoList] = useState([]);
 
   const handleAddAlumno = () => {
-    if (nombre.trim() && apellido.trim && curso.trim !== "") {
-      setAlumnos([
-        ...alumnos,
-        { name: nombre, apellido: apellido, curso: curso, events: 0 },
-      ]);
+    if (nombre.trim() && apellido.trim() && curso.trim()) {
+      const newAlumno = {
+        name: nombre,
+        apellido: apellido,
+        curso: curso,
+        events: 0,
+        eventoList: [],
+      };
+      setAlumnos([...alumnos, newAlumno]);
       setEventosCount((prevCount) => ({ ...prevCount, [nombre]: 0 }));
       setNombre("");
       setApellido("");
@@ -26,22 +30,21 @@ export default function TableEvents() {
 
   //metodo para agregar eventualidades
   const addEvent = () => {
-    const updatedAlumnos = [...alumnos];
+    //const updatedAlumnos = [...alumnos];
     //metodo para agregar eventualidades si se escribe algo e impedir guardado vacio
     if (eventoInput.trim() !== "" && selectedAlumno) {
       const updatedAlumnos = alumnos.map((alumno) => {
-        if (alumno === selectedAlumno) {
-          return { ...alumno, events: alumno.events + 1 };
+        if (alumno.name === selectedAlumno.name) {
+          return {
+            ...alumno,
+            events: alumno.events + 1,
+            eventoList: [...alumno.eventoList, eventoInput],
+          };
         }
         return alumno;
       });
       setAlumnos(updatedAlumnos);
-      /*       setEventoList([...eventoList, eventoInput]); */
-      setEventosCount((prevCount) => ({
-        ...prevCount,
-        [alumnos.name]: prevCount[alumnos.name] + 1,
-      }));
-      /* setEventoInput(""); */
+      setEventoInput("");
       handleCloseModal();
     }
   };
@@ -136,22 +139,18 @@ export default function TableEvents() {
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded p-4 max-w-3xl w-full">
             <h3 className="text-xl font-semibold mb-4 text-black">
-              Agregar Eventualidad
+              Eventos de {selectedAlumno.name} {selectedAlumno.apellido}
             </h3>
             <div>
               {/* evento que mapea la lista de eventos */}
-              {eventoList
-                .filter(
-                  (eventoList) => eventoList.alumno === alumnos.indexOf(alumno)
-                )
-                .map((eventoList, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center border p-2 mb-2 text-black"
-                  >
-                    <span>{eventoInput}</span>
-                  </div>
-                ))}
+              {selectedAlumno.eventoList.map((evento, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center border p-2 mb-2 text-black"
+                >
+                  <span>{evento}</span>
+                </div>
+              ))}
             </div>
             <textarea
               type="text"
