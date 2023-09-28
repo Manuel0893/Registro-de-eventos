@@ -30,11 +30,14 @@ export default function TableEvents() {
 
   //metodo para agregar eventualidades
   const addEvent = () => {
-    //const updatedAlumnos = [...alumnos];
     //metodo para agregar eventualidades si se escribe algo e impedir guardado vacio
     if (eventoInput.trim() !== "" && selectedAlumno) {
       const updatedAlumnos = alumnos.map((alumno) => {
-        if (alumno.name === selectedAlumno.name) {
+        if (
+          alumno.name === selectedAlumno.name &&
+          alumno.apellido === selectedAlumno.apellido &&
+          alumno.curso === selectedAlumno.curso
+        ) {
           return {
             ...alumno,
             events: alumno.events + 1,
