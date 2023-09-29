@@ -30,6 +30,8 @@ export default function TableEvents() {
 
   //metodo para agregar eventualidades
   const addEvent = () => {
+    const now = new Date();
+    const date = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`
     //metodo para agregar eventualidades si se escribe algo e impedir guardado vacio
     if (eventoInput.trim() !== "" && selectedAlumno) {
       const updatedAlumnos = alumnos.map((alumno) => {
@@ -41,7 +43,7 @@ export default function TableEvents() {
           return {
             ...alumno,
             events: alumno.events + 1,
-            eventoList: [...alumno.eventoList, eventoInput],
+            eventoList: [...alumno.eventoList, eventoInput, date],
           };
         }
         return alumno;
@@ -144,14 +146,11 @@ export default function TableEvents() {
             <h3 className="text-xl font-semibold mb-4 text-black">
               Eventos de {selectedAlumno.name} {selectedAlumno.apellido}
             </h3>
-            <div>
+            <div className="flex flex-col gap-1 mb-4 border rounded text-black">
               {/* evento que mapea la lista de eventos */}
               {selectedAlumno.eventoList.map((evento, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center border p-2 mb-2 text-black"
-                >
-                  <span>{evento}</span>
+                <div key={index} className="grid grid-flow-col justify-stretch...">     
+                    <div className="border px-4 py-2">{evento}</div>                  
                 </div>
               ))}
             </div>
