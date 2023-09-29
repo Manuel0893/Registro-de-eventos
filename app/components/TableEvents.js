@@ -31,7 +31,7 @@ export default function TableEvents() {
   //metodo para agregar eventualidades
   const addEvent = () => {
     const now = new Date();
-    const date = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`
+    const date = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
     //metodo para agregar eventualidades si se escribe algo e impedir guardado vacio
     if (eventoInput.trim() !== "" && selectedAlumno) {
       const updatedAlumnos = alumnos.map((alumno) => {
@@ -43,7 +43,10 @@ export default function TableEvents() {
           return {
             ...alumno,
             events: alumno.events + 1,
-            eventoList: [...alumno.eventoList, eventoInput, date],
+            eventoList: [
+              ...alumno.eventoList,
+              { evento: eventoInput, fecha: date },
+            ],
           };
         }
         return alumno;
@@ -132,7 +135,7 @@ export default function TableEvents() {
                   className="ml-2 text-blue-600 hover:underline"
                   onClick={() => handleOpenModal(alumno)}
                 >
-                  Agregar Eventualidad
+                  Ver / Agregar Eventualidad
                 </button>
               </td>
             </tr>
@@ -146,17 +149,24 @@ export default function TableEvents() {
             <h3 className="text-xl font-semibold mb-4 text-black">
               Eventos de {selectedAlumno.name} {selectedAlumno.apellido}
             </h3>
-            <div className="flex flex-col gap-1 mb-4 border rounded text-black">
+            <div className="grid grid-flow-col flex-col gap-1 mb-4 border rounded overflow-y-auto h-80 text-black">
               {/* evento que mapea la lista de eventos */}
-              {selectedAlumno.eventoList.map((evento, index) => (
-                <div key={index} className="grid grid-flow-col justify-stretch...">     
-                    <div className="border px-4 py-2">{evento}</div>                  
-                </div>
-              ))}
+              <div className="flex flex-col  ...">
+                {selectedAlumno.eventoList.map((evento, index) => (
+                  <div key={index}>
+                    <div className="border px-4 py-2 mb-3">
+                      <p className="text-left align-middle">{evento.evento} </p>
+                      <p className="text-right align-middle">
+                        Fecha: {evento.fecha}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             <textarea
               type="text"
-              placeholder="Evento"
+              placeholder="Ingresar evento"
               className="p-2 border rounded mr-2 w-full text-black"
               value={eventoInput}
               onChange={(e) => setEventoInput(e.target.value)}
