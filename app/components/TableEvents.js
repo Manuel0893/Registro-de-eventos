@@ -149,14 +149,14 @@ export default function TableEvents() {
             <h3 className="text-xl font-semibold mb-4 text-black">
               Eventos de {selectedAlumno.name} {selectedAlumno.apellido}
             </h3>
-            <div className="grid grid-flow-col flex-col gap-1 mb-4 border rounded overflow-y-auto h-80 text-black">
+            <div className="grid grid-flow-col flex-col gap-1 mb-4 overflow-y-auto h-80 text-black">
               {/* evento que mapea la lista de eventos */}
               <div className="flex flex-col  ...">
                 {selectedAlumno.eventoList.map((evento, index) => (
                   <div key={index}>
-                    <div className="border px-4 py-2 mb-3">
-                      <p className="text-left align-middle">{evento.evento} </p>
-                      <p className="text-right align-middle">
+                    <div className="border rounded px-4 py-2 mb-3">
+                      <p className="text-left align-middle">{evento.evento}</p>
+                      <p className="text-right align-middle font-sans italic">
                         Fecha: {evento.fecha}
                       </p>
                     </div>
