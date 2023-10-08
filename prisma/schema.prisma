@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model alumnos {
+  IdAlumno Int      @id @default(autoincrement())
+  Curso    String   @db.VarChar(45)
+  personas personas @relation(fields: [IdAlumno], references: [IdPersona], onDelete: NoAction, onUpdate: NoAction, map: "AlumnoNombre")
+  eventos  eventos?
+}
+
+model escuela {
+  idEscuela   Int      @id
+  nombEscuela String   @db.VarChar(200)
+  ubicacion   String   @db.VarChar(50)
+  usuarios    usuarios @relation(fields: [idEscuela], references: [idUsuarios], onDelete: NoAction, onUpdate: NoAction, map: "Usuario-Escuela")
+}
+
+model eventos {
+  idEvento     Int          @id @default(autoincrement())
+  evento       String       @db.VarChar(255)
+  fecha        DateTime     @default(now()) @db.Timestamp(6)
+  alumnos      alumnos      @relation(fields: [idEvento], references: [IdAlumno], onDelete: NoAction, onUpdate: NoAction, map: "EventsAlumnos")
+  funcionarios funcionarios @relation(fields: [idEvento], references: [idFuncionarios], onDelete: NoAction, onUpdate: NoAction, map: "EventsFuncionario")
+}
+
+model funcionarios {
+  idFuncionarios Int      @id
+  Cargo          String   @db.VarChar(45)
+  eventos        eventos?
+  personas       personas @relation(fields: [idFuncionarios], references: [IdPersona], onDelete: NoAction, onUpdate: NoAction, map: "FncionNmb")
+}
+
+model personas {
+  IdPersona    Int           @id @unique(map: "ID_UNIQUE") @default(autoincrement())
+  nombre       String        @db.VarChar(50)
+  aMaterno     String        @db.VarChar(50)
+  aPaterno     String        @db.VarChar(32)
+  alumnos      alumnos?
+  funcionarios funcionarios?
+  usuarios     usuarios?
+}
+
+model usuarios {
+  idUsuarios Int      @id @default(autoincrement())
+  email      String   @db.VarChar(100)
+  password   String   @db.VarChar(20)
+  escuela    escuela?
+  personas   personas @relation(fields: [idUsuarios], references: [IdPersona], onDelete: NoAction, onUpdate: NoAction, map: "User")
+}
